@@ -12,8 +12,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                bat 'cd fastapi-backend && pip install -r requirements.txt'
-                bat 'cd flask-ai-service && pip install -r requirements.txt'
+                bat 'cd fastapi-backend && python -m pip install -r requirements.txt'
+                bat 'cd flask-ai-service && python -m pip install -r requirements.txt'
                 bat 'cd frontend && npm install'
             }
         }
