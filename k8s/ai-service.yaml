@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: review-ai-svc
+spec:
+  selector:
+    app: review-ai
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP

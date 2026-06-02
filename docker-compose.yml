@@ -9,7 +9,7 @@ services:
       - "8000:8000"
     environment:
       - DB_USER=system
-      - DB_PASSWORD=oracle
+      - DB_PASSWORD=hr
       - DB_HOST=host.docker.internal  # Connects to Oracle on your local machine
       - DB_PORT=1521
       - DB_SERVICE=XE
@@ -27,7 +27,7 @@ services:
       - "5000:5000"
     environment:
       - DB_USER=system
-      - DB_PASSWORD=oracle
+      - DB_PASSWORD=hr
       - DB_HOST=host.docker.internal
       - DB_PORT=1521
       - DB_SERVICE=XE
@@ -35,4 +35,14 @@ services:
       - DEBUG=true
     volumes:
       - ./flask-ai-service:/app
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: review-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+      - ai-service
     restart: unless-stopped

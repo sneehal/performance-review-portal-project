@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: review-ai
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: review-ai
+
+  template:
+    metadata:
+      labels:
+        app: review-ai
+
+    spec:
+      containers:
+      - name: ai
+        image: review-ai:latest
+        ports:
+        - containerPort: 5000

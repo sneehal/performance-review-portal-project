@@ -11,6 +11,7 @@ from utils.exceptions import (
     NotFoundException,
     UnauthorizedException
 )
+from datetime import date, datetime
 
 review_dao = ReviewDAO()
 goal_dao = GoalDAO()
@@ -40,8 +41,16 @@ class ReviewService:
             )
 
         # Check deadline
-        self_due = date.fromisoformat(cycle["self_due_date"])
+        self_due_value = cycle["self_due_date"]
+        print(f"Cycle self_due_date from DB: {self_due_value} (type: {type(self_due_value)})")
+
+        if isinstance(self_due_value, date):
+            self_due = self_due_value
+        else:
+            self_due = datetime.strptime(str(self_due_value).split(" ")[0], "%Y-%m-%d").date()
+
         if date.today() > self_due:
+            print(f"Today's date: {date.today()}, Self due date: {self_due}")
             raise ValidationException(
                 f"Self-assessment deadline has passed. Due date was {self_due}"
             )

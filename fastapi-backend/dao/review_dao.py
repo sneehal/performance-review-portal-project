@@ -26,7 +26,7 @@ class ReviewDAO:
                 FROM REVIEWS
                 WHERE user_id  = :user_id
                   AND cycle_id = :cycle_id
-                  AND "type"   = :review_type
+                  AND type   = :review_type
                 """,
                 {
                     "user_id":     user_id,
@@ -60,8 +60,8 @@ class ReviewDAO:
             cursor.execute(
                 """
                 INSERT INTO REVIEWS
-                    (review_id, user_id, cycle_id, "type",
-                     "status", overall_comment)
+                    (review_id, user_id, cycle_id, type,
+                     status, overall_comment)
                 VALUES
                     (:review_id, :user_id, :cycle_id, :review_type,
                      'Draft', :overall_comment)
@@ -104,7 +104,7 @@ class ReviewDAO:
                 """
                 INSERT INTO RATINGS
                     (rating_id, review_id, goal_id,
-                     score, "comment", rated_by)
+                     score, self_comment, rated_by)
                 VALUES
                     (:rating_id, :review_id, :goal_id,
                      :score, :comment, :rated_by)
@@ -135,11 +135,11 @@ class ReviewDAO:
             cursor.execute(
                 """
                 UPDATE REVIEWS
-                SET "status"     = 'Submitted',
+                SET status     = 'Submitted',
                     submitted_at = CURRENT_TIMESTAMP
                 WHERE review_id  = :review_id
                   AND user_id    = :user_id
-                  AND "status"   = 'Draft'
+                  AND status   = 'Draft'
                 """,
                 {"review_id": review_id, "user_id": user_id}
             )

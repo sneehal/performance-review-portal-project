@@ -1,0 +1,14 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { manager } from '../services/portalService';
+import { Card, Loader } from '../components/UI';
+import { errMsg } from '../services/api';
+export default function ManagerReview(){
+ const { reviewId }=useParams(); const [loading,setLoading]=useState(true),[data,setData]=useState(null),[ratings,setRatings]=useState({}),[feedback,setFeedback]=useState(''),[overall,setOverall]=useState(4),[recommendation,setRecommendation]=useState('Meets Expectations'),[msg,setMsg]=useState('');
+ useEffect(()=>{(async()=>{setData(await manager.compare(reviewId)); setLoading(false)})()},[reviewId]);
+ if(loading)return <Loader/>;
+ const submit=async()=>{try{await manager.submit(reviewId,{feedback_text:feedback,overall_rating:+overall,recommendation,ratings:data.goals.map(g=>({goal_id:g.goal_id,score:+(ratings[g.goal_id]?.score||g.self_score||3),comment:ratings[g.goal_id]?.comment||''}))}); setMsg('Manager review submitted successfully')}catch(e){setMsg(errMsg(e))}};
+ return <div><div className="page-title"><div><h2>Manager Review</h2><p>Compare self-ratings and submit final feedback.</p></div></div>{msg&&<div className="alert alert-info">{msg}</div>}
+ <Card><div className="table-responsive"><table className="table align-middle"><thead><tr><th>Goal</th><th>Weight</th><th>Self Score</th><th>Manager Score</th><th>Manager Comment</th></tr></thead><tbody>{data.goals.map(g=><tr key={g.goal_id}><td><b>{g.title}</b><br/><small>{g.self_comment}</small></td><td>{g.weight}%</td><td>{g.self_score}</td><td><select value={ratings[g.goal_id]?.score||g.self_score||3} onChange={e=>setRatings(r=>({...r,[g.goal_id]:{...r[g.goal_id],score:e.target.value}}))}>{[1,2,3,4,5].map(n=><option key={n}>{n}</option>)}</select></td><td><input className="form-control soft-input" onChange={e=>setRatings(r=>({...r,[g.goal_id]:{...r[g.goal_id],comment:e.target.value}}))}/></td></tr>)}</tbody></table></div>
+ <div className="row g-3"><div className="col-md-8"><label>Overall Feedback</label><textarea className="form-control soft-input" rows="4" value={feedback} onChange={e=>setFeedback(e.target.value)} /></div><div className="col-md-2"><label>Rating</label><input className="form-control soft-input" type="number" min="1" max="5" step="0.1" value={overall} onChange={e=>setOverall(e.target.value)}/></div><div className="col-md-2"><label>Recommendation</label><select className="form-control soft-input" value={recommendation} onChange={e=>setRecommendation(e.target.value)}><option>Promote</option><option>Excellent</option><option>Meets Expectations</option><option>Needs Improvement</option><option>PIP</option></select></div></div><button className="primary-btn mt-3" onClick={submit}>Submit Manager Review</button></Card></div>
+}

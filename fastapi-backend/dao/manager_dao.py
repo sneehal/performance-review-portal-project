@@ -94,7 +94,7 @@ class ManagerDAO:
             cursor.execute(
                 """
                 UPDATE REVIEWS
-                SET "status" = 'Completed'
+                SET status = 'Completed'
                 WHERE review_id = :review_id
                 """,
                 {"review_id": review_id}

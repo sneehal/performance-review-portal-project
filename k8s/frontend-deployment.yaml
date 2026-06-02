@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: review-frontend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: review-frontend
+
+  template:
+    metadata:
+      labels:
+        app: review-frontend
+
+    spec:
+      containers:
+      - name: frontend
+        image: review-frontend:latest
+        ports:
+        - containerPort: 80

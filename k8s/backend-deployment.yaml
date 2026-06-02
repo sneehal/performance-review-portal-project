@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: review-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: review-backend
+  template:
+    metadata:
+      labels:
+        app: review-backend
+    spec:
+      containers:
+        - name: backend
+          image: performance-review-portal-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DB_USER
+              value: "SYSTEM"
+            - name: DB_PASSWORD
+              value: "hr"
+            - name: DB_HOST
+              value: "host.docker.internal"
+            - name: DB_PORT
+              value: "1521"
+            - name: DB_SERVICE
+              value: "XE"
+            - name: SECRET_KEY
+              value: "performance_review_secret_key_2025"
+            - name: DEBUG
+              value: "true"
