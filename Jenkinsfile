@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        PYTHON_EXE = 'C:\\Users\\mahin\\AppData\\Local\\Programs\\Python\\Python313\\python.exe'
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -12,8 +16,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                bat 'cd fastapi-backend && python -m pip install -r requirements.txt'
-                bat 'cd flask-ai-service && python -m pip install -r requirements.txt'
+                bat 'cd fastapi-backend && "%PYTHON_EXE%" -m pip install -r requirements.txt'
+                bat 'cd flask-ai-service && "%PYTHON_EXE%" -m pip install -r requirements.txt'
                 bat 'cd frontend && npm install'
             }
         }
@@ -21,7 +25,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'
-                bat 'cd fastapi-backend && python test_all_apis.py'
+                bat 'cd fastapi-backend && "%PYTHON_EXE%" test_all_apis.py'
             }
         }
 
