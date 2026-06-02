@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # FastAPI Backend Service
+  backend:
+    build: ./fastapi-backend
+    container_name: review-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_USER=system
+      - DB_PASSWORD=oracle
+      - DB_HOST=host.docker.internal  # Connects to Oracle on your local machine
+      - DB_PORT=1521
+      - DB_SERVICE=XE
+      - SECRET_KEY=performance_review_secret_key_2025
+      - DEBUG=true
+    volumes:
+      - ./fastapi-backend:/app  # Hot reload during development
+    restart: unless-stopped
+
+  # Flask AI Service
+  ai-service:
+    build: ./flask-ai-service
+    container_name: review-ai
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_USER=system
+      - DB_PASSWORD=oracle
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1521
+      - DB_SERVICE=XE
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DEBUG=true
+    volumes:
+      - ./flask-ai-service:/app
+    restart: unless-stopped
