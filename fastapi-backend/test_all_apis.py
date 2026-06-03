@@ -4,11 +4,17 @@
 
 import requests
 import json
+import sys
+
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except:
+    pass
 
 BASE = "http://localhost:8000"
 
 def print_result(name, response):
-    status = "✅" if response.status_code < 400 else "❌"
+    status = "[PASS]" if response.status_code < 400 else "[FAIL]"
     print(f"{status} {name}")
     print(f"   Status : {response.status_code}")
     try:
