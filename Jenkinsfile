@@ -46,6 +46,7 @@ pipeline {
                 bat 'kubectl --kubeconfig="C:\\Users\\mahin\\.kube\\config" get services'
             }
         }
+    }
 
     post {
         success {
